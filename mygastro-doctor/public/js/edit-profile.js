@@ -89,7 +89,7 @@ function fillForm(data) {
     document.getElementById('license').value = data.licenseNumber || "";
     document.getElementById('bio').value = data.bio || "";
     document.getElementById('bioCount').textContent = `${(data.bio || "").length}/500`;
-    
+
     // Photo
     if (data.photoUrl) {
         docData.existingPhotoUrl = data.photoUrl;
