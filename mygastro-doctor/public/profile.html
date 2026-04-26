@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctor Profile | MyGastro AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .profile-container {
+      max-width: 900px;
+      margin: 3rem auto;
+      padding: 0 1.5rem;
+      min-height: calc(100vh - 250px);
+    }
+    .profile-header-card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 2.5rem;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+    @media (max-width: 640px) {
+      .profile-header-card { flex-direction: column; text-align: center; }
+    }
+    .avatar-lg {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: var(--light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: var(--primary);
+      font-weight: 700;
+      border: 4px solid var(--bg);
+      box-shadow: 0 8px 24px rgba(10, 77, 110, 0.12);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .avatar-lg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+    .profile-info h1 {
+      margin: 0 0 0.5rem;
+      color: var(--primary);
+      font-size: 2.2rem;
+    }
+    .profile-info .title-badge {
+      display: inline-block;
+      padding: 0.35rem 0.8rem;
+      background: var(--accent);
+      color: var(--white);
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+    }
+    .profile-info p {
+      margin: 0.3rem 0;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .edit-btn-wrap {
+      margin-left: auto;
+      align-self: flex-start;
+    }
+    @media (max-width: 640px) {
+      .edit-btn-wrap { margin-left: 0; margin-top: 1rem; align-self: center;}
+    }
+
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    @media (max-width: 768px) {
+      .profile-grid { grid-template-columns: 1fr; }
+    }
+    
+    .info-card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 2rem;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+    .info-card h3 {
+      margin: 0 0 1.2rem;
+      color: var(--primary);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .list-block {
+      margin-bottom: 1.5rem;
+    }
+    .list-block:last-child { margin-bottom: 0; }
+    .list-block h4 {
+      margin: 0 0 0.5rem;
+      color: var(--accent);
+      font-size: 0.95rem;
+    }
+    .list-block ul {
+      margin: 0;
+      padding-left: 1.2rem;
+      color: var(--text);
+      line-height: 1.6;
+    }
+    .list-block ul li { margin-bottom: 0.4rem; }
+
+    .chip-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .profile-chip {
+      padding: 0.4rem 0.8rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    #loading-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 40vh;
+      color: var(--primary);
+    }
+    .spinner-lg {
+      width: 40px;
+      height: 40px;
+      border: 4px solid var(--bg);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 1rem;
+    }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="navbar container">
+      <a href="index.html" class="logo">
+        <span class="logo-text">MyGastro AI</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Dashboard</a></li>
+      </ul>
+      <button class="btn btn-ghost" id="btnLogout" style="color:var(--text); border:1px solid var(--border); display:none;">Logout</button>
+    </nav>
+  </header>
+
+  <main class="profile-container">
+    
+    <div id="loading-state">
+      <div class="spinner-lg"></div>
+      <p style="font-weight: 600;">Loading Doctor Profile...</p>
+    </div>
+
+    <!-- Main Content hidden until fetched -->
+    <div id="profile-content" style="display: none;" class="fade-in-up">
+      
+      <div class="profile-header-card">
+        <div class="avatar-lg" id="profAvatarWrap">
+          <span id="profInitials">DR</span>
+          <img id="profPhoto" src="" alt="Doctor Profile">
+        </div>
+        
+        <div class="profile-info">
+          <div class="title-badge" id="profPrimarySpec">Specialist</div>
+          <h1 id="profName">Dr. Name Placeholder</h1>
+          <p><strong>License:</strong> <span id="profLicense">N/A</span></p>
+          <p><strong>Contact:</strong> <span id="profPhone"></span> &nbsp;|&nbsp; <span id="profEmail"></span></p>
+          <p><strong>Languages:</strong> <span id="profLangs">English</span></p>
+        </div>
+
+        <div class="edit-btn-wrap">
+          <a href="edit-profile.html" class="btn btn-primary btn-gradient">Edit Profile</a>
+        </div>
+      </div>
+
+      <div class="profile-grid">
+        <!-- Experience & Qualifications -->
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+          
+          <div class="info-card">
+            <h3>Experience</h3>
+            <div class="list-block">
+              <h4>Total Experience</h4>
+              <p style="margin:0 0 1rem; color:var(--text);" id="profExpYears">0 Years</p>
+              <h4>Career History</h4>
+              <ul id="profCareerList">
+              </ul>
+            </div>
+          </div>
+
+          <div class="info-card">
+            <h3>Qualifications</h3>
+            <div class="list-block">
+              <h4>Degrees</h4>
+              <ul id="profDegreesList"></ul>
+            </div>
+            <div class="list-block">
+              <h4>Fellowships</h4>
+              <ul id="profFellowshipsList"></ul>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Expertise & Subspecialties -->
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+          
+          <div class="info-card">
+            <h3>Subspecialties</h3>
+            <div class="chip-wrap" id="profSubSpecsWrap">
+              <!-- populated dynamically -->
+            </div>
+            <p id="profNoSub" style="color:var(--muted); font-size:0.9rem; margin:0; display:none;">No subspecialties declared.</p>
+          </div>
+
+          <div class="info-card">
+            <h3>Areas of Expertise</h3>
+            <div class="list-block">
+              <h4>Conditions Handled</h4>
+              <div class="chip-wrap" id="profConditionsWrap" style="margin-top:0.5rem"></div>
+            </div>
+            <div class="list-block" style="margin-top:1.5rem;">
+              <h4>Procedures Performed</h4>
+              <div class="chip-wrap" id="profProceduresWrap" style="margin-top:0.5rem"></div>
+            </div>
+            <p id="profNoExp" style="color:var(--muted); font-size:0.9rem; margin:0; display:none;">No specific expertise defined.</p>
+          </div>
+
+        </div>
+      </div>
+      
+    </div>
+  </main>
+
+  <footer class="site-footer" style="margin-top: 4rem;">
+    <div class="container footer-bottom">
+      <p>&copy; 2026 MyGastro AI. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/profile.js"></script>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | MyGastro AI Doctor Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .auth-container {
+      min-height: calc(100vh - 76px - 150px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 1.5rem;
+    }
+
+    .auth-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      /* 16px border-radius specified in design rules */
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: var(--shadow);
+    }
+
+    .auth-card h2 {
+      margin-top: 0;
+      color: var(--primary);
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .auth-card p.subtitle {
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--text);
+      font-size: 0.95rem;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 1rem;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .btn-block {
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    #success-section {
+      margin-top: 1.5rem;
+    }
+
+    .loading-spinner {
+      display: none;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: var(--white);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-right: 8px;
+    }
+
+    @keyframes spin {
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .error-msg {
+      color: #ef4444;
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Sticky navbar -->
+  <header class="site-header">
+    <nav class="navbar container" aria-label="Main navigation">
+      <a href="index.html" class="logo" aria-label="MyGastro AI home">
+        <span class="logo-icon" aria-hidden="true">
+          <svg viewBox="0 0 64 64" role="img" aria-label="Digestive icon">
+            <path
+              d="M38 8c-3 0-6 2-8 5-2 3-3 7-3 11v6c0 2-1 4-3 6l-4 4c-4 4-6 9-6 15 0 6 5 11 11 11 6 0 11-5 11-11v-6c0-3 1-6 4-9l2-2c5-5 8-12 8-19 0-6-5-11-12-11Z"
+              fill="currentColor"></path>
+            <circle cx="35" cy="44" r="3" fill="#C8EDE0"></circle>
+          </svg>
+        </span>
+        <span class="logo-text">MyGastro AI</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Login Section with fade-in-up animation pattern -->
+  <main class="auth-container">
+    <div class="auth-card fade-in-up visible">
+      <h2>Doctor Portal</h2>
+      <p class="subtitle">Secure passwordless login</p>
+
+      <!-- Email Entry Step -->
+      <div id="email-section">
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" placeholder="Enter your email" required />
+          <div class="error-msg" id="email-error"></div>
+        </div>
+
+        <button id="sendLinkBtn" class="btn btn-primary btn-gradient btn-block">
+          <div class="loading-spinner" id="email-spinner"></div>
+          Send Login Link
+        </button>
+      </div>
+
+      <!-- Success Message Step -->
+      <div id="successMessage" style="display: none; text-align: center;">
+        <div style="color: #10b981; margin-bottom: 1rem;">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+        </div>
+        <h3 style="margin-top: 0;">Check your email</h3>
+        <p style="color: var(--muted); font-size: 0.95rem;">
+          Login link sent to your email. Click the link to securely sign in.
+        </p>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Consistent Footer -->
+  <footer class="site-footer">
+    <div class="container footer-bottom">
+      <p>&copy; 2026 MyGastro AI. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Load the login logic -->
+  <script src="js/login.js"></script>
+</body>
+
+</html>
